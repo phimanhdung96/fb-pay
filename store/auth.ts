@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
+import { crossPlatformStorage } from './crossPlatformStorage';
 
 interface AuthState {
   isLoggedIn: boolean;
@@ -13,15 +13,15 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: false,
   token: null,
   login: async (token: string) => {
-    await AsyncStorage.setItem('token', token);
+    await crossPlatformStorage.setItem('token', token);
     set({ isLoggedIn: true, token });
   },
   logout: async () => {
-    await AsyncStorage.removeItem('token');
+    await crossPlatformStorage.removeItem('token');
     set({ isLoggedIn: false, token: null });
   },
   checkAuth: async () => {
-    const token = await AsyncStorage.getItem('token');
+    const token = await crossPlatformStorage.getItem('token');
     set({ isLoggedIn: !!token, token });
   },
 }));

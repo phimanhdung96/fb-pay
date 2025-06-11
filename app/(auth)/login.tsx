@@ -38,7 +38,7 @@ export default function LoginScreen() {
     // TODO: Implement Facebook login logic
    const result = await promptAsync();  
     if (result.type === 'success' && result.authentication?.accessToken) {
-          await login(result.authentication.accessToken);
+        await login(result.authentication.accessToken);
         router.replace('/(tabs)');
       }
   };
@@ -53,20 +53,7 @@ export default function LoginScreen() {
         <MaterialIcons name="facebook" size={24} color="white" />
         <Text style={styles.fbButtonText}>Continue with Facebook</Text>
       </TouchableOpacity>
-      {/* Khu vực logout nếu đã đăng nhập */}
-      {user && (
-        <TouchableOpacity
-          style={[styles.fbButton, { backgroundColor: '#e74c3c', marginTop: 24 }]}
-          onPress={async () => {
-            await useAuthStore.getState().logout();
-            setUser(null);
-          }}
-          activeOpacity={0.8}
-        >
-          <MaterialIcons name="logout" size={24} color="white" />
-          <Text style={styles.fbButtonText}>Logout</Text>
-        </TouchableOpacity>
-      )}
+
     </View>
   );
 }
