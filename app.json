@@ -32,6 +32,8 @@
       "fbpay",
       "fb600618219704755"
     ],
+    "facebookAppId": "600618219704755",
+    "facebookDisplayName": "fb-pay",
     "plugins": [
       "expo-router",
       [
@@ -51,6 +53,7 @@
     },
     "extra": {
       "router": {},
+      "facebookAppId": "600618219704755",
       "eas": {
         "projectId": "32aa8ba7-eb73-4486-88a2-a3e0da258e16"
       }

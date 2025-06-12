@@ -1,12 +1,28 @@
 import { Image } from 'expo-image';
+import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { facebookService } from '@/service/facebook';
 
 export default function HomeScreen() {
+  const [fbUser, setFbUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchFacebookUser = async () => {
+      try {
+        const user = await facebookService.getUserInfo();
+        setFbUser(user);
+      } catch (err) {
+        console.log('Lỗi lấy thông tin Facebook:', err);
+      }
+    };
+    fetchFacebookUser();
+  }, []);
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -19,6 +35,10 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
+        {/* Hiển thị thông tin Facebook nếu có */}
+        {fbUser && (
+          <ThemedText type="subtitle">Xin chào, {fbUser.name}</ThemedText>
+        )}
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>

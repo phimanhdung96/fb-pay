@@ -1,13 +1,25 @@
 import { useAuthStore } from '@/store/auth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useAuth() {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const checkAuth = useAuthStore((state) => state.checkAuth);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const token = useAuthStore((state) => state.token);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    checkAuth();
+    let cancelled = false;
+    (async () => {
+      try {
+        await checkAuth();
+      } catch (e) {
+        console.log('checkAuth error:', e);
+      } finally {
+        if (!cancelled) setIsReady(true);
+      }
+    })();
+    return () => { cancelled = true; };
   }, [checkAuth]);
 
-  return { isLoggedIn };
+  return { isLoggedIn, isReady, token };
 }

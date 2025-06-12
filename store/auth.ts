@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { crossPlatformStorage } from './crossPlatformStorage';
+import { crossPlatformStorage } from '../utils/crossPlatformStorage';
 
 interface AuthState {
   isLoggedIn: boolean;
@@ -21,7 +21,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoggedIn: false, token: null });
   },
   checkAuth: async () => {
-    const token = await crossPlatformStorage.getItem('token');
+    let token = await crossPlatformStorage.getItem('token');
     set({ isLoggedIn: !!token, token });
   },
 }));
