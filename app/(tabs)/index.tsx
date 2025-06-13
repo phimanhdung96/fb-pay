@@ -7,21 +7,35 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { facebookService } from '@/service/facebook';
+import { useAuthStore } from '@/store/auth';
 
 export default function HomeScreen() {
   const [fbUser, setFbUser] = useState<any>(null);
+  const [campaigns, setCampaigns] = useState<any>(null);
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     const fetchFacebookUser = async () => {
       try {
         const user = await facebookService.getUserInfo();
         setFbUser(user);
+        // --- LẤY CHIẾN DỊCH QUẢNG CÁO FACEBOOK CÁ NHÂN ---
+        if (token) {
+          try {
+            const result = await facebookService.getPersonalAdCampaigns(token);
+            setCampaigns(result);
+            console.log('Personal Ad Campaigns:', result);
+          } catch (err) {
+            console.log('Lỗi lấy campaign quảng cáo cá nhân:', err);
+          }
+        }
+        // --- END ---
       } catch (err) {
         console.log('Lỗi lấy thông tin Facebook:', err);
       }
     };
     fetchFacebookUser();
-  }, []);
+  }, [token]);
 
   return (
     <ParallaxScrollView
@@ -38,6 +52,12 @@ export default function HomeScreen() {
         {/* Hiển thị thông tin Facebook nếu có */}
         {fbUser && (
           <ThemedText type="subtitle">Xin chào, {fbUser.name}</ThemedText>
+        )}
+        {/* Hiển thị danh sách campaign nếu có */}
+        {campaigns && campaigns.data && campaigns.data.length > 0 && (
+          <ThemedText type="subtitle">
+            Bạn có {campaigns.data.length} chiến dịch quảng cáo cá nhân
+          </ThemedText>
         )}
       </ThemedView>
       <ThemedView style={styles.stepContainer}>

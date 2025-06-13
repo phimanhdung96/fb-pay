@@ -7,6 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "fbpay",
     "userInterfaceStyle": "automatic",
+    "platforms": ["ios", "android", "web"],
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
@@ -28,12 +29,6 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "schemes": [
-      "fbpay",
-      "fb600618219704755"
-    ],
-    "facebookAppId": "600618219704755",
-    "facebookDisplayName": "fb-pay",
     "plugins": [
       "expo-router",
       [
@@ -46,16 +41,16 @@
         }
       ],
       "expo-web-browser",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-updates"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "router": {},
-      "facebookAppId": "600618219704755",
       "eas": {
-        "projectId": "32aa8ba7-eb73-4486-88a2-a3e0da258e16"
+        "projectId": "eeb88418-f2b9-4b41-80ce-842e3d7cf92e"
       }
     }
   }

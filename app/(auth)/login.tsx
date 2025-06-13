@@ -1,12 +1,13 @@
+import { facebookService } from "@/service/facebook";
 import { useAuthStore } from "@/store/auth";
-import { fetchJson } from "@/utils/fetchJson";
+import { CLIENT_ID } from '@env';
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as AuthSession from "expo-auth-session";
 import * as facebook from "expo-auth-session/providers/facebook";
 import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -16,9 +17,17 @@ export default function LoginScreen() {
   const redirectUri = AuthSession.makeRedirectUri({ useProxy: true } as any);
 
   const [request, response, promptAsync] = facebook.useAuthRequest({
-    clientId: "600618219704755",
+    clientId: CLIENT_ID,
     redirectUri, // Đảm bảo truyền redirectUri này
-    scopes: ["public_profile", "email"],
+    scopes: [
+      "public_profile",
+      "email",
+      "pages_show_list", // Xem danh sách Fanpage
+      "pages_read_engagement", // Đọc dữ liệu tương tác Fanpage (bài viết, bình luận, lượt thích)
+      "ads_management", // Quản lý quảng cáo
+      "ads_read", // Đọc dữ liệu quảng cáo
+      "business_management", // Quản lý tài khoản Business Manager
+    ],
     responseType: AuthSession.ResponseType.Token,
   });
   const login = useAuthStore((state) => state.login);
@@ -28,11 +37,16 @@ export default function LoginScreen() {
     if (response && response?.type === "success" && response.authentication) {
       const { authentication } = response;
       (async () => {
-        // Fetch user data from Facebook Graph API
-        const userData = await fetchJson(
-          `https://graph.facebook.com/me?access_token=${authentication.accessToken}&fields=id,name,email,picture`
-        );
-        setUser(userData);
+        try {
+          // Import facebookService nếu chưa import
+          const campaigns = await facebookService.getPersonalAdCampaigns(
+            authentication.accessToken
+          );
+          console.log("Personal Ad Campaigns:", campaigns);
+        } catch (err) {
+          console.log("Lỗi lấy campaign quảng cáo cá nhân:", err);
+        }
+        // --- END ---
       })();
     }
   }, [response]);
@@ -75,11 +89,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: 300,
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
+    // Chỉ dùng boxShadow cho web, elevation cho mobile, KHÔNG dùng shadow* props
+    ...(Platform.OS === 'web'
+      ? { boxShadow: "0px 2px 2px rgba(0,0,0,0.2)" }
+      : { elevation: 2 }),
   },
   fbButtonText: {
     color: "white",

@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --dev-client",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -21,19 +21,19 @@
     "expo-auth-session": "~6.2.0",
     "expo-blur": "~14.1.5",
     "expo-constants": "~17.1.6",
+    "expo-crypto": "^14.1.5",
     "expo-dev-client": "~5.2.0",
     "expo-font": "~13.3.1",
     "expo-haptics": "~14.1.4",
-    "expo-image": "~2.2.0",
+    "expo-image": "~2.3.0",
     "expo-linking": "~7.1.5",
-    "expo-random": "^14.0.1",
-    "expo-router": "~5.0.7",
+    "expo-router": "~5.1.0",
     "expo-secure-store": "~14.2.3",
     "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
-    "expo-storage": "^53.0.11",
     "expo-symbols": "~0.4.5",
     "expo-system-ui": "~5.0.8",
+    "expo-updates": "^0.28.14",
     "expo-web-browser": "~14.1.6",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -46,13 +46,22 @@
     "react-native-webview": "13.13.5",
     "zustand": "^5.0.5"
   },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "expo-random"
+        ]
+      }
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/axios": "^0.9.36",
     "@types/react": "~19.0.10",
-    "@types/react-native": "^0.72.8",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
+    "react-native-dotenv": "^3.4.11",
     "typescript": "~5.8.3"
   },
   "private": true
